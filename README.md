@@ -7,13 +7,13 @@
 没错，这就是我晚上没睡着想搞的一个无聊之极的游戏。
 
 ##截图
-![image]()
+![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-1.png)
 start
 
-![image]()
+![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-2.png)
 gaming
 
-![image]()
+![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-3.png)
 boxing
 
 ##构建说明
