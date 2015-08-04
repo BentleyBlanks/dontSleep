@@ -8,13 +8,13 @@
 
 ##截图
 ![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-1.png)
-start
+Start
 
 ![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-2.png)
-gaming
+Gaming
 
 ![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-3.png)
-boxing
+Boxing
 
 ##构建说明
 1.data文件夹中缺少字体文件已在[百度云](http://pan.baidu.com/s/1o6Id7D4)提供，当然也可以自行替换成本地字体命名为3.ttf即可
@@ -27,6 +27,8 @@ boxing
 2.毫无美感，毫无游戏性，打发时间必备利器！！！
 
 3.无论是时间到点还是血量到头，都会让游戏结束，难度极低，0时间上手！！！
+
+4.目前没有写过重新开始，可根据自己需求自己写一点无聊的内容……
 
 =====
 ##Author
