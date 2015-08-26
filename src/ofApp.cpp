@@ -13,15 +13,23 @@ enum e_gameState
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetWindowShape(2048, 1536);
+    width = ofGetWidth();
+    height = ofGetHeight();
     
     gameState = GAME_CLICK_TO_START;
     
-    pressToStart.loadImage("clickToStart.png");
-    face.loadImage("3.jpg");
+    pressToStart.loadImage("doge_bg.jpg");
+    face.loadImage("yawn.jpg");
     hand.loadImage("hand.png");
     handHit.loadImage("handHit.png");
     background.loadImage("background.jpg");
-    gameBackground.loadImage("gameBackground.png");
+    gameBackground.loadImage("doge_bg_2.jpg");
+    doge.loadImage("doge.jpg");
+    startButton.loadImage("startButton.png");
+    settingButtonNormal.loadImage("settingButton.png");
+    settingButtonHover.loadImage("settingButtonHover.png");
+    settingButtonPressed.loadImage("settingButtonPressed.png");
+    settingButton = &settingButtonNormal;
     
     hitMask.allocate(1, 1);
     hitMask.begin();
@@ -30,17 +38,29 @@ void ofApp::setup(){
     
     pressToStartString.loadFont("3.ttf", 50);
     copyRight.loadFont("3.ttf", 20);
-    healthString.loadFont("3.ttf", 45);
-    awakeString.loadFont("3.ttf", 45);
-    scoreString.loadFont("3.ttf", 45);
-    timeString.loadFont("3.ttf", 45);
-    gameOverString.loadFont("3.ttf", 60);
+    healthString.loadFont("3.ttf", 35);
+    awakeString.loadFont("3.ttf", 35);
+    scoreString.loadFont("3.ttf", 35);
+    timeString.loadFont("3.ttf", 35);
+    gameOverString.loadFont("3.ttf", 50);
+    fps.loadFont("3.ttf", 20);
+    start.loadFont("3.ttf", 30);
+    
+    bgm_1.loadSound("libaibai.mp3");
+    bgm_1.play();
+    
+    bgm_2.loadSound("bring me.mp3");
     
     pTime = nowTime = pHealthTime = nowHealthTime = 0;
     minute = second = hour = psecond = 0;
     awake = 100;
     score = 0;
     health = 100;
+    // ui
+//    startButtonHeight = 100;
+//    startButtonWidth = 200;
+    startButtonPosition.set(width / 2 - startButton.getWidth() / 2, height * 2.5 / 4);
+    settingButtonPosition.set(width / 2 - settingButton->getWidth() / 2, height * 3 / 4);
 }
 
 //--------------------------------------------------------------
@@ -51,8 +71,40 @@ void ofApp::update(){
     switch (gameState)
     {
         case GAME_CLICK_TO_START:
-        case GAME_STOP:
+            // 在按钮矩形中
+            // start button update
+            if(mouseX < startButtonPosition.x+startButton.getWidth() && mouseX > startButtonPosition.x &&
+               mouseY < startButtonPosition.y+startButton.getHeight() && mouseY > startButtonPosition.y)
+            {
+                if(mouseX - startButtonPosition.x > startButton.getWidth() / 2)
+                    startButtonPosition.x -= startButtonPosition.x + startButton.getWidth() - mouseX;
+                else
+                    startButtonPosition.x += mouseX - startButtonPosition.x;
+                
+                if(mouseY - startButtonPosition.y > startButton.getHeight() / 2)
+                    startButtonPosition.y -= startButtonPosition.y + startButton.getHeight() - mouseY;
+                else
+                    startButtonPosition.y += mouseY - startButtonPosition.y;
+            }
+            
+            // setting button update
+            if(mouseX < settingButtonPosition.x+settingButton->getWidth() && mouseX > settingButtonPosition.x &&
+               mouseY < settingButtonPosition.y+settingButton->getHeight() && mouseY > settingButtonPosition.y)
+            {
+                if(ofGetMousePressed())
+                    settingButton = &settingButtonPressed;
+                else
+                    settingButton = &settingButtonHover;
+            }
+            else
+                settingButton = &settingButtonNormal;
+            break;
+            
         case GAME_RESTART:
+            break;
+            
+        case GAME_STOP:
+            bgm_2.stop();
             break;
             
         case GAME_STARING:
@@ -70,25 +122,36 @@ void ofApp::update(){
                 nowTime = ofGetElapsedTimef();
                 
                 bFirst = false;
+                
+                // 更换bgm
+                bgm_1.stop();
+                bgm_2.play();
             }
             
             // 健康自动回复
             nowHealthTime = ofGetElapsedTimef();
-            if(nowHealthTime - pHealthTime > 1.0)
+            if(nowHealthTime - pHealthTime > 0.2)
             {
-                health ++;
+                health += 0.5;
+                
+                awake -= 2;
+                
+                if(awake <= 0)
+                {
+                    gameState = GAME_STOP;
+                }
                 
                 pHealthTime = nowHealthTime;
             }
             
             // 拳击时间更新也在这里
             nowTime = ofGetElapsedTimef();
-            if(nowTime - pTime >= 1.0)
+            if(nowTime - pTime >= 0.5)
             {
                 if(bHit)
                 {
-                    health -= 10;
-                    awake += 5;
+                    health -= 5;
+                    awake += 7;
                     bHit = false;
                 }
                 
@@ -104,14 +167,9 @@ void ofApp::update(){
             if(second == 0)
                 psecond = 0;
             
-            if(second - psecond >= 1.0)
+            if(second - psecond >= 60)
             {
                 psecond = second;
-                awake -= 2;
-                if(awake <= 0)
-                {
-                    gameState = GAME_STOP;
-                }
             }
             break;
     }
@@ -122,24 +180,29 @@ void ofApp::draw(){
     
     switch (gameState) {
         case GAME_CLICK_TO_START:
-            ofBackground(ofColor(255));
+            ofBackground(ofColor(0));
             
             //background.draw(0, 0, width, height);
             pressToStart.draw(width/2 - pressToStart.getWidth()/2, height/2 - pressToStart.getHeight()/2);
             
             ofPushStyle();
-            ofSetColor(200, 20, 20);
-            pressToStartString.drawString("Press To Start", width*3.0f/7.0f, height/2.0f);
-            ofSetColor(20, 20, 20);
-            copyRight.drawString("All rights not reserved.Buguan you see understand or see don't understand.\nI dou would write zhexie hua down.", width/3.0f, height*2.0f/3.0f);
+            //ofSetColor(200, 20, 20);
+            //pressToStartString.drawString("Press To Start", width*3.0f/7.0f, height/2.0f);
+            ofSetColor(200, 200, 200);
+            copyRight.drawString("All rights not reserved.Buguan you see understand or see don't understand.\nI dou would write zhexie hua down.", width / 30.0f, height*19.0f/20.0f);
             ofPopStyle();
+            
+            // 按钮位置更新
+            startButton.draw(startButtonPosition);
+            settingButton->draw(settingButtonPosition);
             break;
             
         case GAME_STARING:
         {
-            ofBackground(ofColor(255));
+            ofBackground(ofColor(33, 233, 33));
             //background.draw(0, 0, width, height);
             gameBackground.draw(0, 0, width, height);
+            // 循环doge
             
             // game
             // 此处用帧动画代替
@@ -156,7 +219,7 @@ void ofApp::draw(){
             // ui
             ofPushStyle();
             
-            ofSetColor(80, 80, 190);
+            ofSetColor(80, 80, 100);
             ofRect(0, height*5.0f/6.0f, width, height/6.0f);
             
             float uiHeight = height*5.0/6.0f;
@@ -187,8 +250,10 @@ void ofApp::draw(){
             ofPopStyle();
             
             // face
+            ofPushStyle();
             face.draw(width*4.0/9.0f, uiHeight, width/9.0f, height/6.0f);
             ofLine(width*4.0/9.0f, uiHeight, width*4.0f/9.0f, height);
+            ofPopStyle();
             
             // time
             static float startTime = ofGetElapsedTimef();
@@ -232,6 +297,11 @@ void ofApp::draw(){
         case GAME_RESTART:
             break;
     }
+    
+    ofPushStyle();
+    ofSetColor(20, 20, 20);
+    fps.drawString("FPS: " + ofToString(ofGetFrameRate()), width / 20.0f, height / 20.0f);
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------

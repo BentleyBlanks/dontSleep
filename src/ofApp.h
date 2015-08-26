@@ -27,11 +27,14 @@ public:
     ofTrueTypeFont pressToStartString, copyRight;
     
     // ui
-    ofTrueTypeFont healthString, awakeString, timeString, scoreString;
+    ofTrueTypeFont healthString, awakeString, timeString, scoreString, fps, start;
     //int startTime;
     int minute, second, hour, psecond;
     float score, health, awake;
     ofImage face;
+    ofImage startButton, *settingButton;
+    ofImage settingButtonNormal, settingButtonHover, settingButtonPressed;
+    ofPoint startButtonPosition, settingButtonPosition;
     
     // game
     ofImage background, gameBackground;
@@ -42,4 +45,10 @@ public:
     float pTime, nowTime;
     float pHealthTime, nowHealthTime;
     ofTrueTypeFont gameOverString;
+    
+    // bgm
+    ofSoundPlayer bgm_1, bgm_2;
+    
+    // loop
+    ofImage doge;
 };
