@@ -7,10 +7,10 @@
 没错，这就是我晚上没睡着想搞的一个无聊之极的游戏。
 
 ##截图
-![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-1.png)
+![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-11.png)
 Start
 
-![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-2.png)
+![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-22.png)
 Gaming
 
 ![image](https://github.com/BentleyBlanks/dontSleep/blob/master/screenshot/screenshot-3.png)
